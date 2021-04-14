@@ -9,8 +9,8 @@
 
     <h1>Select a Major</h1>
 
-    <input type="button" value="CIT Majors" onclick="getCITMajors()">
-    <input type="button" value="Business Majors" onclick="getBizMajors()">
+    <input type="button" value="CIT Majors" id="citBtn">
+    <input type="button" value="Business Majors" id="bizBtn">
 
     <h2>We filter out dataset by major</h2>
 
@@ -31,45 +31,51 @@
 </script>
 
 <script>
-    var request = new XMLHttpRequest();
-    var url = "cit5students.json";
-    request.open('GET', url);
-
-    request.onload = function(){
-        var students = JSON.parse(request.responseText);
-    }
-
-    function getCITMajors(){
-            if (request.status == 200){
-                var templateText = document.getElementById("tableTemplate").innerHTML;
-                var compiledTemplateText = Handlebars.compile(templateText);
-
-                var citMajors = students.filter(function(student){
-                    return student.major == "CIT";
-                });
-                compiledHTML = compiledTemplateText({rows:citMajors})
-                document.getElementById("result").innerHTML = compiledHTML;
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelector("#citBtn").onclick = function(){
+            var request = new XMLHttpRequest();
+            var url = "cit5students.json";
+            request.open('GET', url);
+            request.onload = function(){
+                var students = JSON.parse(request.responseText);
+                if (request.status == 200){
+                    var templateText = document.getElementById("tableTemplate").innerHTML;
+                    var compiledTemplateText = Handlebars.compile(templateText);
+                    var citMajors = students.filter(function(student){
+                        return student.major == "CIT";
+                    });
+                    compiledHTML = compiledTemplateText({rows:citMajors})
+                    document.getElementById("result").innerHTML = compiledHTML;
+                }
+                else {
+                    document.getElementById("result").innerHTML = "There was an error."
+                }
             }
-            else {
-                document.getElementById("result").innerHTML = "There was an error."
+            request.send(null);
+        };
+        document.querySelector("#bizBtn").onclick = function(){
+            var request = new XMLHttpRequest();
+            var url = "cit5students.json";
+            request.open('GET', url);
+            request.onload = function(){
+                var students = JSON.parse(request.responseText);
+                if (request.status == 200){
+                    var templateText = document.getElementById("tableTemplate").innerHTML;
+                    var compiledTemplateText = Handlebars.compile(templateText);
+                    var citMajors = students.filter(function(student){
+                        return student.major == "BUS";
+                    });
+                    compiledHTML = compiledTemplateText({rows:citMajors})
+                    document.getElementById("result").innerHTML = compiledHTML;
+                }
+                else {
+                    document.getElementById("result").innerHTML = "There was an error."
+                }
             }
-        }
+            request.send(null);
+        };
+    });
 
-    function getBizMajors(){
-        if (request.status == 200){
-                var templateText = document.getElementById("tableTemplate").innerHTML;
-                var compiledTemplateText = Handlebars.compile(templateText);
-
-                var bizMajors = students.filter(function(student){
-                    return student.major == "BUS";
-                });
-                compiledHTML = compiledTemplateText({rows:bizMajors})
-                document.getElementById("result").innerHTML = compiledHTML;
-        }
-        else {
-                document.getElementById("result").innerHTML = "There was an error."
-            }
-    }
 
 </script>
 
