@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Project 5</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.2/handlebars.min.js"></script>
+</head>
+<body>
+
+    <h1>Select a Major</h1>
+
+    <input type="button" value="CIT Majors" id="citBtn">
+    <input type="button" value="Business Majors" id="bizBtn">
+
+    <h2>We filter out dataset by major</h2>
+
+    <div id="result"></div>
+    
+</body>
+
+<!--handlebars template-->
+<script type="text/x-handlebars-template" id="tableTemplate">
+    <table cellspacing='5'>
+        <tr><th>Name</th><th>Major</th><th>Midterm</th><th>Final</th></tr>
+        {{#each rows}}
+            <tr>
+                <td>{{name}}</td><td>{{major}}</td><td>{{midterm}}</td><td>{{final}}</td>
+            </tr>
+        {{/each}}
+    </table>
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+
+        document.querySelector("#citBtn").onclick = function(){
+            var request = new XMLHttpRequest();
+            var url = "cit5students.json";
+            request.open('GET', url);
+            request.onload = function(){
+                var students = JSON.parse(request.responseText);
+                if (request.status == 200){
+                    var templateText = document.getElementById("tableTemplate").innerHTML;
+                    var compiledTemplateText = Handlebars.compile(templateText);
+                    var citMajors = students.filter(function(student){
+                        return student.major == "CIT";
+                    });
+                    compiledHTML = compiledTemplateText({rows:citMajors})
+                    document.getElementById("result").innerHTML = compiledHTML;
+                }
+                else {
+                    document.getElementById("result").innerHTML = "There was an error."
+                }
+            }
+            request.send(null);
+        };
+
+        document.querySelector("#bizBtn").onclick = function(){
+            var request = new XMLHttpRequest();
+            var url = "cit5students.json";
+            request.open('GET', url);
+            request.onload = function(){
+                var students = JSON.parse(request.responseText);
+                if (request.status == 200){
+                    var templateText = document.getElementById("tableTemplate").innerHTML;
+                    var compiledTemplateText = Handlebars.compile(templateText);
+                    var bizMajors = students.filter(function(student){
+                        return student.major == "BUS";
+                    });
+                    compiledHTML = compiledTemplateText({rows:bizMajors})
+                    document.getElementById("result").innerHTML = compiledHTML;
+                }
+                else {
+                    document.getElementById("result").innerHTML = "There was an error."
+                }
+            }
+            request.send(null);
+        };
+    });
+
+</script>
+
+</html>
