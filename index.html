@@ -1,83 +1,51 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Project 5</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.2/handlebars.min.js"></script>
-</head>
-<body>
+<html>
+  <head>
+      <meta charset="UTF-8">
+      <title>Title of the document</title>
+	  <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.2/handlebars.min.js"></script>
+  </head>
 
-    <h1>Select a Major</h1>
+  <body>
+      <h2>Handlebars templates to populate a table with an array of objects using Ajax</h2>
 
-    <input type="button" value="CIT Majors" id="citBtn">
-    <input type="button" value="Business Majors" id="bizBtn">
+      <h3>array of people objects as a table</h3>
+          <div id="peopleTable"></div>
+  </body>
 
-    <h2>We filter out dataset by major</h2>
-
-    <div id="result"></div>
-    
-</body>
-
-<!--handlebars template-->
+<!-- The script element is used to define the Handlebars template -->
 <script type="text/x-handlebars-template" id="tableTemplate">
-    <table cellspacing='5'>
-        <tr><th>Name</th><th>Major</th><th>Midterm</th><th>Final</th></tr>
-        {{#each rows}}
+   <table cellspacing='12'>
+       <tr><th>Name</th><th>State</th><th>Age</th><th>Flavor</th></tr>
+       {{#each rows}}
             <tr>
-                <td>{{name}}</td><td>{{major}}</td><td>{{midterm}}</td><td>{{final}}</td>
+                <td>{{name}}</td><td>{{state}}</td><td>{{age}}</td><td>{{flavor}}</td>
             </tr>
-        {{/each}}
-    </table>
+      {{/each}}
+   </table>
 </script>
-
+  
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    var request = new XMLHttpRequest();
+    var url = "hb6data.json";
+    request.open('GET', url);     // open the request
+	
+    request.onload = function() {                     // the data is back...
 
-        document.querySelector("#citBtn").onclick = function(){
-            var request = new XMLHttpRequest();
-            var url = "cit5students.json";
-            request.open('GET', url);
-            request.onload = function(){
-                var students = JSON.parse(request.responseText);
-                if (request.status == 200){
-                    var templateText = document.getElementById("tableTemplate").innerHTML;
-                    var compiledTemplateText = Handlebars.compile(templateText);
-                    var citMajors = students.filter(function(student){
-                        return student.major == "CIT";
-                    });
-                    compiledHTML = compiledTemplateText({rows:citMajors})
-                    document.getElementById("result").innerHTML = compiledHTML;
-                }
-                else {
-                    document.getElementById("result").innerHTML = "There was an error."
-                }
-            }
-            request.send(null);
-        };
+        var data = JSON.parse(request.responseText);    // de-stringify JSON back to regular array of JavaScript objects
 
-        document.querySelector("#bizBtn").onclick = function(){
-            var request = new XMLHttpRequest();
-            var url = "cit5students.json";
-            request.open('GET', url);
-            request.onload = function(){
-                var students = JSON.parse(request.responseText);
-                if (request.status == 200){
-                    var templateText = document.getElementById("tableTemplate").innerHTML;
-                    var compiledTemplateText = Handlebars.compile(templateText);
-                    var bizMajors = students.filter(function(student){
-                        return student.major == "BUS";
-                    });
-                    compiledHTML = compiledTemplateText({rows:bizMajors})
-                    document.getElementById("result").innerHTML = compiledHTML;
-                }
-                else {
-                    document.getElementById("result").innerHTML = "There was an error."
-                }
-            }
-            request.send(null);
-        };
-    });
+        if (request.status == 200) {
+              var templateText = document.getElementById('tableTemplate').innerHTML; // Get template text 
+              var compiledTemplateText = Handlebars.compile(templateText);    // Compile the Handlebars template
+              compiledHtml = compiledTemplateText({ rows: data })             // Evaluate the template
+			  document.getElementById('peopleTable').innerHTML = compiledHtml; 	// put html table into division
+        }
+        else {
+            document.querySelector('#peopleTable').innerHTML = "There was an error, or currency symbol not found";
+        }
+    }
 
+    request.send(null);
+  
 </script>
-
 </html>
