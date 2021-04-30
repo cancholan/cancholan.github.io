@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html><head><title>Project 6 Home</title>
+<html><head><title>Grade Point Averages</title>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
@@ -16,8 +16,8 @@
             </div>
             <div>
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="index.html">All Advisees</a></li>
-                    <li><a href="gpa.html">Grade Point Averages</a></li>
+                    <li><a href="index.html">All Advisees</a></li>
+                    <li class="active"><a href="gpa.html">Grade Point Averages</a></li>
                 </ul>
             </div>
         </nav>
@@ -30,17 +30,13 @@
                     <th>sid</th>
                     <th>last name</th>
                     <th>first name</th>
-                    <th>credit hours</th>
-                    <th>gpa points</th>
-                    <th>major</th>
+                    <th>gpa</th> <!--gpa points / credit hrs-->
                 </tr>
                 <tr ng-repeat = "student in students | filter:search_text ">
                     <td>{{student.id}}</td>
                     <td>{{student.last_name}}</td>
-                    <td>{{studennt.first_name}}</td>
-                    <td>{{student.credit_hrs}}</td>
-                    <td>{{student.gpa_points}}</td>
-                    <td>{{student.major}}</td>
+                    <td>{{student.first_name}}</td>
+                    <td>{{(student.gpa_points / student.credit_hrs).toFixed(1)}}</td>
                 </tr>
            </table>
         </div> <!--close app-->
